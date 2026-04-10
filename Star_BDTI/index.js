@@ -1,1 +1,0 @@
-console.log(["Hello 笔.COOL 控制台"])
