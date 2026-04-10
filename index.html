@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>星星人格测试 · 张杰粉丝专属</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a0f2a 0%, #0b1525 100%);
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, 'Noto Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 550px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border-radius: 56px;
+            padding: 28px 24px 40px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 255, 255, 0.1);
+        }
+
+        .star-badge {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 32px;
+            letter-spacing: 8px;
+            opacity: 0.7;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(135deg, #fff, #7dd3fc, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .sub {
+            text-align: center;
+            color: #9bb5e0;
+            font-size: 14px;
+            margin-bottom: 32px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            padding-bottom: 16px;
+        }
+
+        .progress-area {
+            margin-bottom: 28px;
+        }
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #b9d0ff;
+            margin-bottom: 8px;
+        }
+        .progress-bar-bg {
+            background: rgba(255,255,255,0.2);
+            border-radius: 40px;
+            height: 6px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #a855f7);
+            border-radius: 40px;
+            transition: width 0.3s ease;
+        }
+
+        .question-area {
+            margin: 20px 0 28px;
+        }
+        .question-text {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.35;
+            color: #f0f3ff;
+            margin-bottom: 28px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-btn {
+            background: rgba(20, 30, 55, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 60px;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: left;
+            color: #eef4ff;
+            transition: all 0.2s;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
+        .option-btn:active {
+            transform: scale(0.97);
+            background: #2c3e77;
+            border-color: #7dd3fc;
+        }
+        .option-btn span.letter {
+            display: inline-block;
+            width: 28px;
+            font-weight: 700;
+            color: #7dd3fc;
+        }
+
+        .result-card {
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        .result-title {
+            font-size: 40px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffe6b0, #ffb347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 12px 0 8px;
+        }
+        .result-desc {
+            background: rgba(0,0,0,0.35);
+            border-radius: 32px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 17px;
+            line-height: 1.45;
+            color: #d9e6ff;
+            text-align: left;
+        }
+        .restart-btn {
+            background: linear-gradient(95deg, #2563eb, #7c3aed);
+            border: none;
+            border-radius: 60px;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: 0.2s;
+        }
+        .restart-btn:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+        }
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: #6f8fbc;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+<div class="card" id="app">
+    <div class="star-badge">✨ ⭐ 🌟</div>
+    <h1>⭐ 星星人格测试 · BDTI⭐</h1>
+    <div class="sub">张杰粉丝专属 · 测测你是哪颗星</div>
+
+    <div id="progressArea" class="progress-area">
+        <div class="progress-text">
+            <span>✨ 北斗星之路</span>
+            <span id="questionCounter">第1 / 12题</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <div id="dynamicContent"></div>
+</div>
+
+<script>
+    // ========== 人格类型（共11种，丰富且有趣）==========
+    const PERSONALITY_TYPES = {
+        VOCAL_LOVER: { name: "🎵 声控星星", desc: "你最爱张杰的嗓音！高音一出来你就浑身鸡皮疙瘩。对你来说，杰哥的声音就是最好的治愈，手机里存的全是他Live的纯享版。", primary: "VOCAL" },
+        STAGE_MANIAC: { name: "💃 舞台狂热星", desc: "你是舞台粉！最爱看杰哥跳舞，尤其是《She's Hot》《Jump》这些，每一个wave你都反复刷。演唱会你永远盯着他的脚步，比他自己还熟悉编舞。", primary: "STAGE" },
+        IRON_FAN: { name: "🌟 北斗铁粉星", desc: "你是张杰的坚实后盾，喜欢他好多年了，歌单里全是他的歌，连冷门宝藏你都会唱。你总是默默守护，在每一个重要时刻亮起蓝色星光。", primary: "LOYALTY" },
+        ALL_ROUNDER: { name: "💪 全能应援星", desc: "你不仅是听歌，还积极参与打榜、安利、组织线下活动。你是星星中的全能战士，哪里需要哪里就有你的身影，社交平台上最活跃的那个。", primary: "ACTIVE" },
+        MUSIC_LOVER: { name: "📀 音乐品鉴星", desc: "你对张杰的音乐有着独特的品味和理解，关注编曲、风格、制作细节。从《天下》到《要得》，你欣赏他在音乐上的每一次突破。", primary: "MUSIC" },
+        LIVE_KING: { name: "🔥 现场王者星", desc: "你追求的是张杰演唱会的极致体验！你可能已经去过好几场了，甚至追过不同城市。对你来说，杰哥的Live才是灵魂，录音室版本只是预热。", primary: "LIVE" },
+        FANS_CLUB: { name: "📚 考古学家星", desc: "你最爱翻张杰早期的视频、访谈、冷门歌曲。你对他的成长轨迹了如指掌，常常在群里分享珍贵的老物料，是星星中的历史专家。", primary: "HISTORY" },
+        QUIET_STAR: { name: "🌙 佛系听歌星", desc: "你喜欢张杰的音乐，但不太参与粉圈活动。你享受一个人戴着耳机听他的歌，让他的歌声陪你度过每一个平凡的日子。", primary: "BALANCED" },
+        NEW_STAR: { name: "✨ 新晋小星星", desc: "你刚刚加入北斗星空不久，正在疯狂补课。虽然资历尚浅，但你的热情一点不少，未来还有很长的路要和杰哥一起走。", primary: "NEW" },
+        TOUR_FAN: { name: "🚂 追列车的旅人星", desc: "你是巡演追随者！杰哥唱到哪里你就跟到哪里，对每一站的特色了如指掌。你享受在路上的感觉，也享受和星星们一起狂欢的夜晚。", primary: "TOUR" },
+        NEW_MEDIA_FAN: { name: "📱 新媒体互动星", desc: "你是网络冲浪高手！杰哥一发动态你就秒评，粉丝群的梗你全都接得住。你还经常在短视频平台刷他的直拍，是星星里的气氛担当。", primary: "NEW_MEDIA" }
+    };
+
+    // ========== 趣味题库（共34题，每道5个选项，随机抽12题）==========
+    const FULL_QUESTION_SET = [
+        // 听歌习惯与偏好
+        { text: "在KTV点张杰的歌，你通常会？", options: [
+            { label: "直接点《天下》开嗓", type: "MUSIC" },
+            { label: "深情款《他不懂》", type: "VOCAL" },
+            { label: "燃炸全场《逆战》", type: "STAGE" },
+            { label: "新歌《要得》炫一下", type: "MUSIC" },
+            { label: "看心情，每首都想来一遍", type: "BALANCED" }
+        ]},
+        { text: "你最喜欢在什么场景听张杰的歌？", options: [
+            { label: "通勤路上，耳机一戴谁都不爱", type: "QUIET" },
+            { label: "深夜emo，听情歌疗伤", type: "VOCAL" },
+            { label: "健身跑步，励志歌走起", type: "STAGE" },
+            { label: "洗澡时开个人演唱会", type: "LIVE" },
+            { label: "任何时候，他是我的BGM", type: "BALANCED" }
+        ]},
+        { text: "你手机里张杰的歌有多少？", options: [
+            { label: "几十首，建了个专属歌单", type: "LOYALTY" },
+            { label: "十几首常听的", type: "BALANCED" },
+            { label: "几首最经典的", type: "QUIET" },
+            { label: "他的每张专辑我都下载了", type: "HISTORY" },
+            { label: "新歌一出来就加进去", type: "NEW_MEDIA" }
+        ]},
+        { text: "你第一次听张杰的歌是什么感觉？", options: [
+            { label: "惊艳，这嗓子绝了", type: "VOCAL" },
+            { label: "温暖，想一直循环", type: "MUSIC" },
+            { label: "没什么特别，后来越听越上头", type: "NEW" },
+            { label: "瞬间入坑，就他了", type: "LOYALTY" },
+            { label: "觉得这歌怎么这么难唱", type: "BALANCED" }
+        ]},
+        // 演唱会与现场
+        { text: "如果有机会去张杰演唱会，你最想？", options: [
+            { label: "全场跟唱，嗓子喊哑", type: "LIVE" },
+            { label: "盯着他的舞步，学动作", type: "STAGE" },
+            { label: "安静听歌，享受现场", type: "QUIET" },
+            { label: "拍视频发朋友圈炫耀", type: "ACTIVE" },
+            { label: "带上应援物，摇到手臂酸", type: "TOUR" }
+        ]},
+        { text: "你去看过张杰的演唱会吗？", options: [
+            { label: "去过，不止一次", type: "LIVE" },
+            { label: "没去过，但超想去", type: "ACTIVE" },
+            { label: "看过线上直播", type: "BALANCED" },
+            { label: "随缘，有机会就去", type: "QUIET" },
+            { label: "追过不同城市", type: "TOUR" }
+        ]},
+        { text: "你觉得张杰演唱会最让你激动的是？", options: [
+            { label: "他的高音现场", type: "VOCAL" },
+            { label: "全场蓝色星海", type: "LOYALTY" },
+            { label: "唱跳环节", type: "STAGE" },
+            { label: "他和星星们的互动", type: "ACTIVE" },
+            { label: "每场不一样的惊喜", type: "TOUR" }
+        ]},
+        { text: "如果张杰在你城市连开好几场，你会？", options: [
+            { label: "能去几场去几场", type: "LIVE" },
+            { label: "选一场最喜欢的日期", type: "BALANCED" },
+            { label: "看钱包决定", type: "QUIET" },
+            { label: "请假也要全勤", type: "TOUR" },
+            { label: "抢最前排的票", type: "ACTIVE" }
+        ]},
+        // 粉丝行为与应援
+        { text: "你会在朋友圈安利张杰的新歌吗？", options: [
+            { label: "经常，我是自来水", type: "ACTIVE" },
+            { label: "偶尔，好听才发", type: "BALANCED" },
+            { label: "从不，自己听就行", type: "QUIET" },
+            { label: "在小号悄悄发", type: "NEW_MEDIA" },
+            { label: "做成短视频发抖音", type: "NEW_MEDIA" }
+        ]},
+        { text: "你买过张杰的专辑或周边吗？", options: [
+            { label: "买过，支持正版", type: "LOYALTY" },
+            { label: "买过一些喜欢的", type: "ACTIVE" },
+            { label: "没有，以后会买", type: "NEW" },
+            { label: "不买，听歌就够了", type: "QUIET" },
+            { label: "收藏了很多绝版", type: "HISTORY" }
+        ]},
+        { text: "遇到有人说张杰不好，你会？", options: [
+            { label: "理智反驳，甩现场视频", type: "ACTIVE" },
+            { label: "内心不爽但懒得理", type: "QUIET" },
+            { label: "跟朋友吐槽那人没品味", type: "LOYALTY" },
+            { label: "无所谓，杰哥用实力说话", type: "BALANCED" },
+            { label: "直接拉黑", type: "NEW_MEDIA" }
+        ]},
+        { text: "你觉得自己在星星群体中属于？", options: [
+            { label: "默默支持型", type: "QUIET" },
+            { label: "活跃互动型", type: "ACTIVE" },
+            { label: "资源考古型", type: "HISTORY" },
+            { label: "新入坑热情型", type: "NEW" },
+            { label: "佛系听歌型", type: "BALANCED" }
+        ]},
+        // 歌曲偏好与情感连接
+        { text: "你最喜欢的张杰歌曲类型是？", options: [
+            { label: "古风大气（天下、剑心）", type: "MUSIC" },
+            { label: "深情慢歌（他不懂、明天过后）", type: "VOCAL" },
+            { label: "励志燃向（最美的太阳、逆战）", type: "STAGE" },
+            { label: "MIX-POP新风格（要得、未·LIVE）", type: "MUSIC" },
+            { label: "唱跳歌曲（She's Hot、Jump）", type: "STAGE" }
+        ]},
+        { text: "哪句歌词最能代表你当下的心情？", options: [
+            { label: "“沉默会被错误解读，进攻是最好的防护”", type: "LOYALTY" },
+            { label: "“黑夜过后的光芒有多美”", type: "VOCAL" },
+            { label: "“逆战逆战来也”", type: "STAGE" },
+            { label: "“他不懂爱情把它当游戏”", type: "MUSIC" },
+            { label: "“STAND UP 梦不是幻想”", type: "MUSIC" }
+        ]},
+        { text: "你听张杰的歌时，最常出现的情绪是？", options: [
+            { label: "热血沸腾", type: "STAGE" },
+            { label: "感动想哭", type: "VOCAL" },
+            { label: "放松治愈", type: "QUIET" },
+            { label: "回忆青春", type: "HISTORY" },
+            { label: "充满力量", type: "LOYALTY" }
+        ]},
+        { text: "你心中张杰的“神曲”是哪首？", options: [
+            { label: "《天下》", type: "VOCAL" },
+            { label: "《坚如磐石》", type: "MUSIC" },
+            { label: "《一个人的远方》", type: "LOYALTY" },
+            { label: "《千万次想象》", type: "MUSIC" },
+            { label: "《逆战》", type: "STAGE" },
+            { label: "太多了！选不出来！", type: "LOYALTY" }
+        ]},
+        // 新动态趣味题（避免知识类，改为主观感受）
+        { text: "你听过张杰《要得》专辑吗？感觉如何？", options: [
+            { label: "超爱，川渝味儿太正了", type: "MUSIC" },
+            { label: "喜欢，MIX-POP很新鲜", type: "MUSIC" },
+            { label: "还没听，但马上去补", type: "NEW" },
+            { label: "还是更喜欢老歌", type: "HISTORY" },
+            { label: "循环好多遍了", type: "LOYALTY" }
+        ]},
+        { text: "如果张杰在演唱会上唱《老子数道三》，你会？", options: [
+            { label: "跟着一起数，嗨翻全场", type: "LIVE" },
+            { label: "录下来发抖音", type: "NEW_MEDIA" },
+            { label: "觉得好有趣，回家循环", type: "MUSIC" },
+            { label: "有点懵，但杰哥唱啥都行", type: "BALANCED" },
+            { label: "回去学方言", type: "ACTIVE" }
+        ]},
+        { text: "你知道张杰最近被粉丝开玩笑叫“鸟巢打工人”吗？", options: [
+            { label: "知道，还跟着玩梗", type: "NEW_MEDIA" },
+            { label: "听说过，觉得好笑", type: "NEW" },
+            { label: "不太清楚", type: "QUIET" },
+            { label: "我还在补课中", type: "NEW" },
+            { label: "我也叫他打工杰", type: "ACTIVE" }
+        ]},
+        { text: "张杰2026年鸟巢连开16场，你的第一反应是？", options: [
+            { label: "太牛了，想去现场", type: "LIVE" },
+            { label: "杰哥身体吃得消吗", type: "LOYALTY" },
+            { label: "钱包在哭泣", type: "QUIET" },
+            { label: "不愧是华语Live王", type: "BALANCED" },
+            { label: "我去了其中好几场", type: "TOUR" }
+        ]},
+        // 舞蹈与舞台趣味
+        { text: "你最喜欢张杰哪首唱跳歌曲？", options: [
+            { label: "《She's Hot》", type: "STAGE" },
+            { label: "《Jump》", type: "STAGE" },
+            { label: "《Perfume》", type: "STAGE" },
+            { label: "《无药可救》", type: "STAGE" },
+            { label: "《Dance Floor》", type: "STAGE" }
+        ]},
+        { text: "你会尝试模仿张杰的舞蹈动作吗？", options: [
+            { label: "会，我还在B站发过翻跳", type: "STAGE" },
+            { label: "想学但肢体不协调", type: "BALANCED" },
+            { label: "只看不跳", type: "QUIET" },
+            { label: "我连他的wave都研究过", type: "STAGE" },
+            { label: "我是舞蹈老师，经常教", type: "NEW_MEDIA" }
+        ]},
+        { text: "你觉得张杰的舞蹈风格是？", options: [
+            { label: "性感撩人", type: "STAGE" },
+            { label: "帅气有力", type: "STAGE" },
+            { label: "可爱俏皮", type: "BALANCED" },
+            { label: "越来越有国际范", type: "MUSIC" },
+            { label: "自成一派", type: "LOYALTY" }
+        ]},
+        { text: "你刷过张杰的舞蹈直拍吗？", options: [
+            { label: "刷过，每个细节都不放过", type: "STAGE" },
+            { label: "偶尔看", type: "BALANCED" },
+            { label: "只看舞台整体", type: "LIVE" },
+            { label: "没看过", type: "QUIET" },
+            { label: "刷到就停不下来", type: "NEW_MEDIA" }
+        ]},
+        // 情怀与回忆
+        { text: "你是因为哪首歌认识张杰的？", options: [
+            { label: "《北斗星的爱》", type: "HISTORY" },
+            { label: "《天下》", type: "MUSIC" },
+            { label: "《最美的太阳》", type: "LOYALTY" },
+            { label: "《千万次想象》", type: "NEW" },
+            { label: "《逆战》", type: "STAGE" }
+        ]},
+        { text: "你最喜欢张杰的哪首冷门宝藏歌曲？", options: [
+            { label: "《两全》", type: "LOYALTY" },
+            { label: "《青梅竹马》", type: "LOYALTY" },
+            { label: "《幸福瞬间》", type: "LOYALTY" },
+            { label: "我全都喜欢！", type: "HISTORY" },
+            { label: "没听过，求推荐", type: "NEW" },
+        ]},
+        { text: "张杰对你来说意味着什么？", options: [
+            { label: "青春的记忆", type: "HISTORY" },
+            { label: "前进的动力", type: "LOYALTY" },
+            { label: "日常的陪伴", type: "QUIET" },
+            { label: "音乐启蒙", type: "MUSIC" },
+            { label: "精神支柱", type: "BALANCED" }
+        ]},
+        { text: "如果让你用一句话形容张杰，你会说？", options: [
+            { label: "华语Live王", type: "LIVE" },
+            { label: "温柔大北斗", type: "LOYALTY" },
+            { label: "唱跳全能", type: "STAGE" },
+            { label: "我的青春", type: "HISTORY" },
+            { label: "永远的神", type: "NEW_MEDIA" }
+        ]},
+        // 趣味假设
+        { text: "如果张杰有一天来你的城市开见面会，你会？", options: [
+            { label: "请假也要去", type: "LIVE" },
+            { label: "想办法搞到票", type: "ACTIVE" },
+            { label: "看缘分", type: "QUIET" },
+            { label: "组织粉丝一起去", type: "ACTIVE" },
+            { label: "带上自制应援物", type: "TOUR" }
+        ]},
+        { text: "你希望张杰未来尝试什么新风格？", options: [
+            { label: "摇滚", type: "MUSIC" },
+            { label: "R&B", type: "MUSIC" },
+            { label: "电子舞曲", type: "STAGE" },
+            { label: "他做什么我都爱", type: "LOYALTY" },
+            { label: "尝试民谣", type: "BALANCED" }
+        ]},
+        { text: "你觉得张杰最帅的瞬间是？", options: [
+            { label: "飙高音的时候", type: "VOCAL" },
+            { label: "跳舞的wave", type: "STAGE" },
+            { label: "对星星们说“谢谢”", type: "ACTIVE" },
+            { label: "舞台上大汗淋漓", type: "LIVE" },
+            { label: "笑着和粉丝互动", type: "NEW_MEDIA" }
+        ]},
+        { text: "你平时怎么称呼张杰？", options: [
+            { label: "杰哥", type: "BALANCED" },
+            { label: "大北斗", type: "LOYALTY" },
+            { label: "星星的太阳", type: "QUIET" },
+            { label: "直接叫张杰", type: "NEW" },
+            { label: "打工杰（开玩笑）", type: "NEW_MEDIA" }
+        ]},
+        { text: "如果张杰邀请你上台合唱，你会选哪首歌？", options: [
+            { label: "《天下》", type: "MUSIC" },
+            { label: "《这，就是爱》", type: "VOCAL" },
+            { label: "《最美的太阳》", type: "LOYALTY" },
+            { label: "《逆战》", type: "STAGE" },
+            { label: "《星星》", type: "QUIET" }
+        ]},
+        { text: "你最喜欢张杰的哪个舞台造型？", options: [
+            { label: "古风长袍", type: "MUSIC" },
+            { label: "西装绅士", type: "VOCAL" },
+            { label: "运动休闲", type: "STAGE" },
+            { label: "炫酷皮衣", type: "LIVE" },
+            { label: "背带裤可爱风", type: "BALANCED" }
+        ]}
+    ];
+
+    const QUESTIONS_PER_TEST = 12;
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let dimensionScores = {
+        VOCAL:0, STAGE:0, LOYALTY:0, ACTIVE:0, MUSIC:0,
+        LIVE:0, HISTORY:0, BALANCED:0, NEW:0, QUIET:0,
+        TOUR:0, NEW_MEDIA:0
+    };
+    let quizFinished = false;
+
+    const dynamicDiv = document.getElementById('dynamicContent');
+    const progressArea = document.getElementById('progressArea');
+    const questionCounterSpan = document.getElementById('questionCounter');
+    const progressFill = document.getElementById('progressFill');
+
+    function getRandomQuestions(n) {
+        let shuffled = [...FULL_QUESTION_SET];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled.slice(0, n);
+    }
+
+    function initDimensionScores() {
+        dimensionScores = {
+            VOCAL:0, STAGE:0, LOYALTY:0, ACTIVE:0, MUSIC:0,
+            LIVE:0, HISTORY:0, BALANCED:0, NEW:0, QUIET:0,
+            TOUR:0, NEW_MEDIA:0
+        };
+    }
+
+    function updateProgress() {
+        if (quizFinished) return;
+        const percent = ((currentIndex) / currentQuestions.length) * 100;
+        progressFill.style.width = percent + '%';
+        questionCounterSpan.innerText = `第${currentIndex+1} / ${currentQuestions.length}题`;
+    }
+
+    function getDominantPersonality() {
+        // 特殊类型优先判定（阈值可微调）
+        if (dimensionScores.NEW >= 4) return PERSONALITY_TYPES.NEW_STAR;
+        if (dimensionScores.HISTORY >= 5) return PERSONALITY_TYPES.FANS_CLUB;
+        if (dimensionScores.LIVE >= 5) return PERSONALITY_TYPES.LIVE_KING;
+        if (dimensionScores.TOUR >= 4) return PERSONALITY_TYPES.TOUR_FAN;
+        if (dimensionScores.NEW_MEDIA >= 4) return PERSONALITY_TYPES.NEW_MEDIA_FAN;
+        
+        let maxScore = 0;
+        let primaryType = null;
+        const primaryKeys = ['VOCAL', 'STAGE', 'LOYALTY', 'ACTIVE', 'MUSIC'];
+        for (let key of primaryKeys) {
+            if (dimensionScores[key] > maxScore) {
+                maxScore = dimensionScores[key];
+                primaryType = key;
+            }
+        }
+        if (primaryType === 'VOCAL') return PERSONALITY_TYPES.VOCAL_LOVER;
+        if (primaryType === 'STAGE') return PERSONALITY_TYPES.STAGE_MANIAC;
+        if (primaryType === 'LOYALTY') return PERSONALITY_TYPES.IRON_FAN;
+        if (primaryType === 'ACTIVE') return PERSONALITY_TYPES.ALL_ROUNDER;
+        if (primaryType === 'MUSIC') return PERSONALITY_TYPES.MUSIC_LOVER;
+        return PERSONALITY_TYPES.QUIET_STAR;
+    }
+
+    function renderQuestion() {
+        if (currentIndex >= currentQuestions.length) {
+            finishQuiz();
+            return;
+        }
+        const q = currentQuestions[currentIndex];
+        let optionsHtml = '';
+        const letters = ['A', 'B', 'C', 'D', 'E'];
+        q.options.forEach((opt, idx) => {
+            optionsHtml += `
+                <div class="option-btn" data-type="${opt.type}">
+                    <span class="letter">${letters[idx]}</span>  ${opt.label}
+                </div>
+            `;
+        });
+
+        const html = `
+            <div class="question-area">
+                <div class="question-text">${q.text}</div>
+                <div class="options" id="optionsList">
+                    ${optionsHtml}
+                </div>
+            </div>
+        `;
+        dynamicDiv.innerHTML = html;
+
+        const optionBtns = document.querySelectorAll('.option-btn');
+        optionBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const typeKey = btn.getAttribute('data-type');
+                if (dimensionScores[typeKey] !== undefined) dimensionScores[typeKey]++;
+                currentIndex++;
+                updateProgress();
+                if (currentIndex < currentQuestions.length) renderQuestion();
+                else finishQuiz();
+            });
+        });
+    }
+
+    function finishQuiz() {
+        quizFinished = true;
+        progressArea.style.display = 'none';
+        const result = getDominantPersonality();
+
+        const resultHtml = `
+            <div class="result-card">
+                <div style="font-size: 48px;">🌟</div>
+                <div class="result-title">${result.name}</div>
+                <div class="result-desc">
+                    🎤 你的星星人格 · 专属头衔<br><br>
+                    ${result.desc}<br><br>
+                    💙 “只要张杰唱下去，星星就永远亮着。”
+                </div>
+                <button class="restart-btn" id="restartBtn">✨ 再测一次 ✨</button>
+                <div class="footer">⭐ 本测试纯属娱乐 · 致敬每一位星星 ⭐</div>
+            </div>
+        `;
+        dynamicDiv.innerHTML = resultHtml;
+        const restartBtn = document.getElementById('restartBtn');
+        if (restartBtn) {
+            restartBtn.addEventListener('click', () => {
+                currentQuestions = getRandomQuestions(QUESTIONS_PER_TEST);
+                currentIndex = 0;
+                initDimensionScores();
+                quizFinished = false;
+                progressArea.style.display = 'block';
+                updateProgress();
+                renderQuestion();
+            });
+        }
+    }
+
+    function initQuiz() {
+        currentQuestions = getRandomQuestions(QUESTIONS_PER_TEST);
+        currentIndex = 0;
+        initDimensionScores();
+        quizFinished = false;
+        progressArea.style.display = 'block';
+        updateProgress();
+        renderQuestion();
+    }
+
+    initQuiz();
+</script>
+</body>
+</html>
