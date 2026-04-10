@@ -1,11 +1,11 @@
-# BDTI测试
+# BDTI
 
 
 ## 简介
 
-BeiDou Type Indicator
-Stars' Personalities 
-for 杰哥的星星们
+- BeiDou Type Indicator
+- Stars' Personalities 
+- for 杰哥的星星们
 
 
 ## 声明
